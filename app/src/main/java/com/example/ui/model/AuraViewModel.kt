@@ -294,9 +294,18 @@ class AuraViewModel(
                             _tempMailInboxLogs.value = _tempMailInboxLogs.value +
                                 "📨 [Kiro] 收到验证码: $code"
 
+                            val password = regResult.password
+                            if (password == null) {
+                                _tempMailInboxLogs.value = _tempMailInboxLogs.value +
+                                    "❌ [Kiro] 注册失败: 未生成密码"
+                                delay(5000)
+                                _accountSalts.value++
+                                continue
+                            }
+
                             val tokens = kiroEngine.completeWithOtp(
                                 code, mailAccount.email,
-                                regResult.password
+                                password
                             )
                             if (tokens.success) {
                                 val accessToken = tokens.accessToken ?: ""
