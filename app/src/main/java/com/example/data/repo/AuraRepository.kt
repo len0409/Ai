@@ -10,7 +10,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.util.concurrent.TimeUnit
 
-class AuraRepository(private val database: AppDatabase) {
+class AuraRepository(val database: AppDatabase) {
 
     private val apiKeyDao: ApiKeyDao = database.apiKeyDao()
     private val httpClient = OkHttpClient.Builder()

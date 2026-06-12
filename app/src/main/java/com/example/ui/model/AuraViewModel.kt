@@ -299,15 +299,16 @@ class AuraViewModel(
                                 regResult.password
                             )
                             if (tokens.success) {
+                                val accessToken = tokens.accessToken ?: ""
                                 _tempMailInboxLogs.value = _tempMailInboxLogs.value + listOf(
                                     "🎉 [Kiro] 注册成功!",
                                     "📧 $mailAccount.email",
-                                    "🔑 accessToken: ${tokens.accessToken.take(20)}..."
+                                    "🔑 accessToken: ${accessToken.take(20)}..."
                                 )
                                 // 存入密钥池
                                 repository.insertKey(ApiKeyItem(
                                     keyLabel = "Kiro 自动注册",
-                                    keyValue = tokens.accessToken,
+                                    keyValue = accessToken,
                                     provider = "Kiro",
                                     status = "Active"
                                 ))
@@ -351,14 +352,15 @@ class AuraViewModel(
                                 mailAccount.email, code
                             )
                             if (result.success) {
+                                val apiKey = result.apiKey ?: ""
                                 _tempMailInboxLogs.value = _tempMailInboxLogs.value + listOf(
                                     "🎉 [$provider] 注册成功!",
                                     "📧 ${mailAccount.email}",
-                                    "🔑 API Key: ${result.apiKey.take(20)}..."
+                                    "🔑 API Key: ${apiKey.take(20)}..."
                                 )
                                 repository.insertKey(ApiKeyItem(
                                     keyLabel = "$provider 自动注册",
-                                    keyValue = result.apiKey,
+                                    keyValue = apiKey,
                                     provider = provider,
                                     status = "Active"
                                 ))
@@ -403,14 +405,15 @@ class AuraViewModel(
                                 mailAccount.email, code
                             )
                             if (result.success) {
+                                val token = result.token ?: ""
                                 _tempMailInboxLogs.value = _tempMailInboxLogs.value + listOf(
                                     "🎉 [$provider] 注册成功!",
                                     "📧 ${mailAccount.email}",
-                                    "🔑 Token: ${result.token.take(20)}..."
+                                    "🔑 Token: ${token.take(20)}..."
                                 )
                                 repository.insertKey(ApiKeyItem(
                                     keyLabel = "$provider 自动注册",
-                                    keyValue = result.token,
+                                    keyValue = token,
                                     provider = provider,
                                     status = "Active"
                                 ))
@@ -452,14 +455,15 @@ class AuraViewModel(
 
                             val result = deepSeekEngine.completeWithCode(mailAccount.email, code, password)
                             if (result.success) {
+                                val apiKey = result.apiKey ?: ""
                                 _tempMailInboxLogs.value = _tempMailInboxLogs.value + listOf(
                                     "🎉 [$provider] 注册成功!",
                                     "📧 ${mailAccount.email}",
-                                    "🔑 API Key: ${result.apiKey.take(20)}..."
+                                    "🔑 API Key: ${apiKey.take(20)}..."
                                 )
                                 repository.insertKey(ApiKeyItem(
                                     keyLabel = "$provider 自动注册",
-                                    keyValue = result.apiKey,
+                                    keyValue = apiKey,
                                     provider = provider,
                                     status = "Active"
                                 ))
@@ -501,14 +505,15 @@ class AuraViewModel(
 
                             val result = groqEngine.completeWithCode(mailAccount.email, code, password)
                             if (result.success) {
+                                val apiKey = result.apiKey ?: ""
                                 _tempMailInboxLogs.value = _tempMailInboxLogs.value + listOf(
                                     "🎉 [$provider] 注册成功!",
                                     "📧 ${mailAccount.email}",
-                                    "🔑 API Key: ${result.apiKey.take(20)}..."
+                                    "🔑 API Key: ${apiKey.take(20)}..."
                                 )
                                 repository.insertKey(ApiKeyItem(
                                     keyLabel = "$provider 自动注册",
-                                    keyValue = result.apiKey,
+                                    keyValue = apiKey,
                                     provider = provider,
                                     status = "Active"
                                 ))
@@ -589,14 +594,15 @@ class AuraViewModel(
 
                             val result = engine.completeWithPhoneCode(password, phoneCode)
                             if (result.success) {
+                                val accessToken = result.accessToken ?: ""
                                 _tempMailInboxLogs.value = _tempMailInboxLogs.value + listOf(
                                     "🎉 [$provider] 注册成功!",
                                     "📧 ${mailAccount.email}",
-                                    "🔑 Access Token: ${result.accessToken.take(20)}..."
+                                    "🔑 Access Token: ${accessToken.take(20)}..."
                                 )
                                 repository.insertKey(ApiKeyItem(
                                     keyLabel = "$provider 自动注册",
-                                    keyValue = result.accessToken,
+                                    keyValue = accessToken,
                                     provider = provider,
                                     status = "Active"
                                 ))
@@ -677,14 +683,15 @@ class AuraViewModel(
 
                             val result = engine.completeWithPhoneCode(password, phoneCode)
                             if (result.success) {
+                                val apiKey = result.apiKey ?: ""
                                 _tempMailInboxLogs.value = _tempMailInboxLogs.value + listOf(
                                     "🎉 [$provider] 注册成功!",
                                     "📧 ${mailAccount.email}",
-                                    "🔑 API Key: ${result.apiKey.take(20)}..."
+                                    "🔑 API Key: ${apiKey.take(20)}..."
                                 )
                                 repository.insertKey(ApiKeyItem(
                                     keyLabel = "$provider 自动注册",
-                                    keyValue = result.apiKey,
+                                    keyValue = apiKey,
                                     provider = provider,
                                     status = "Active"
                                 ))

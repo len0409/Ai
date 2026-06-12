@@ -11,7 +11,7 @@ data class AiPlatform(
     val loginUrl: String,
     val chatUrl: String,
     val apiBaseUrl: String,
-    val apiConsoleUrl: String, // API 控制台 URL，用于抓取 API Key
+    val apiConsoleUrl: String = "", // API 控制台 URL，用于抓取 API Key
     val tokenType: TokenType,
     val tokenExtractMethod: TokenExtractMethod,
     val models: List<ModelInfo>,
