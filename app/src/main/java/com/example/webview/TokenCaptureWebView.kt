@@ -60,7 +60,7 @@ fun LoginWebView(
                         // Try JS-based capture for platforms that store token in localStorage
                         if (platform.jsExtractCode != null) {
                             view?.evaluateJavascript(platform.jsExtractCode) { result ->
-                                if (result != null && result != "null" && result != """" && !didCapture) {
+                                if (result != null && result != "null" && result != "\"\"" && !didCapture) {
                                     didCapture = true
                                     onTokenCaptured(result.trim('"'))
                                 }
