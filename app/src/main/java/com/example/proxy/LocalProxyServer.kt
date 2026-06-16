@@ -23,7 +23,9 @@ class LocalProxyServer(
 
     fun start() {
         if (server != null) return
-        server = embeddedServer(Netty, port = port, module = Application::module).start(wait = false)
+        server = embeddedServer(Netty, port = port) {
+                module()
+            }.start(wait = false)
     }
 
     fun stop() {
