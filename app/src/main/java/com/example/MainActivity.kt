@@ -1,6 +1,5 @@
 package com.example
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,13 +30,14 @@ class MainActivity : ComponentActivity() {
                     "${System.currentTimeMillis()}\n${e.stackTraceToString()}"
                 )
             } catch (_: Exception) {}
-            setContent { CrashScreen(error = e) }
+            setContent { CrashScreen(error = e, activity = this) }
         }
     }
 }
 
 @Composable
-private fun CrashScreen(error: Throwable) {
+private fun CrashScreen(error: Throwable, activity: ComponentActivity) {
+    val context = LocalContext.current
     MaterialTheme(colorScheme = darkColorScheme(), content = {
         Column(
             Modifier.fillMaxSize().padding(24.dp),
@@ -45,16 +46,19 @@ private fun CrashScreen(error: Throwable) {
         ) {
             Text("应用启动失败", color = Color(0xFFFF1744), fontSize = 20.sp)
             Spacer(Modifier.height(16.dp))
-            Text(error.javaClass.simpleName + ": " + (error.message ?: ""),
+            Text("${error.javaClass.simpleName}: ${error.message ?: ""}",
                 color = Color(0xFFE6EDF3), fontSize = 14.sp)
             Spacer(Modifier.height(8.dp))
             Text(error.stackTraceToString(), color = Color(0xFF8B949E),
                 fontSize = 10.sp, fontFamily = FontFamily.Monospace)
             Spacer(Modifier.height(16.dp))
             Button(onClick = {
-                startActivity(Intent(applicationContext, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                })
+                activity.finishAffinity()
+                context.startActivity(
+                    context.packageManager.getLaunchIntentForPackage(context.packageName)!!.apply {
+                        flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                )
             }) {
                 Text("重启应用")
             }
