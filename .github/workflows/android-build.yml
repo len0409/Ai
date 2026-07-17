@@ -32,8 +32,18 @@ jobs:
         with:
           packages: 'platforms;android-34 build-tools;34.0.0'
 
+      - name: Generate release keystore
+        run: |
+          keytool -genkey -v -keystore release.keystore -alias release \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -storepass android -keypass android \
+            -dname "CN=AI Relay, OU=Dev, O=AI Relay, L=City, ST=State, C=CN"
+
       - name: Build Debug APK
         run: ./gradlew assembleDebug
+
+      - name: Build Release APK
+        run: KEYSTORE_PASSWORD=android ./gradlew assembleRelease
 
       - name: Generate version tag
         id: version
@@ -52,5 +62,7 @@ jobs:
 
             ### 变更
             ${{ github.event.head_commit.message }}
-          files: app/build/outputs/apk/debug/app-debug.apk
+          files: |
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/release/app-release.apk
           generate_release_notes: true
