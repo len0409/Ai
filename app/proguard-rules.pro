@@ -18,3 +18,6 @@
 -keep class okhttp3.** { *; }
 -dontwarn okhttp3.**
 -dontwarn okio.**
+
+# SLF4J (used by Ktor/Netty)
+-dontwarn org.slf4j.impl.**

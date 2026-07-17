@@ -39,11 +39,8 @@ jobs:
             -storepass android -keypass android \
             -dname "CN=AI Relay, OU=Dev, O=AI Relay, L=City, ST=State, C=CN"
 
-      - name: Build Debug APK
+      - name: Build APK
         run: ./gradlew assembleDebug
-
-      - name: Build Release APK
-        run: KEYSTORE_PASSWORD=android ./gradlew assembleRelease
 
       - name: Generate version tag
         id: version
@@ -59,10 +56,6 @@ jobs:
           name: AI Relay ${{ steps.version.outputs.tag }}
           body: |
             自动构建 APK — ${{ github.sha }}
-
-            ### 变更
-            ${{ github.event.head_commit.message }}
-          files: |
-            app/build/outputs/apk/debug/app-debug.apk
-            app/build/outputs/apk/release/app-release.apk
+            变更: ${{ github.event.head_commit.message }}
+          files: app/build/outputs/apk/debug/app-debug.apk
           generate_release_notes: true
