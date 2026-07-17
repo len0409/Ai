@@ -1,4 +1,4 @@
-name: Android CI Build & Release
+name: Android Release Build
 
 on:
   push:
@@ -39,23 +39,37 @@ jobs:
             -storepass android -keypass android \
             -dname "CN=AI Relay, OU=Dev, O=AI Relay, L=City, ST=State, C=CN"
 
-      - name: Build APK
-        run: ./gradlew assembleDebug
+      - name: Build Release APK
+        run: KEYSTORE_PASSWORD=android ./gradlew assembleRelease
 
       - name: Generate version tag
         id: version
         run: |
           COMMIT_COUNT=$(git rev-list --count HEAD)
           SHORT_SHA=$(git rev-parse --short HEAD)
-          echo "tag=v2.5.${COMMIT_COUNT}-${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "tag=v2.5.0-${COMMIT_COUNT}" >> $GITHUB_OUTPUT
+          echo "name=AI Relay v2.5.0 (正式版 #${COMMIT_COUNT})" >> $GITHUB_OUTPUT
+
+      - name: Rename APK
+        run: |
+          cp app/build/outputs/apk/release/app-release.apk \
+             app/build/outputs/apk/release/AI-Relay-v2.5.0.apk
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}
-          name: AI Relay ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.name }}
           body: |
-            自动构建 APK — ${{ github.sha }}
-            变更: ${{ github.event.head_commit.message }}
-          files: app/build/outputs/apk/debug/app-debug.apk
+            ## AI Relay 正式版 v2.5.0
+
+            签名 Release APK，可直接安装。
+
+            ### 安装
+            下载下方 `AI-Relay-v2.5.0.apk` 安装即可。
+
+            ### 构建信息
+            - Commit: ${{ github.sha }}
+            - 变更: ${{ github.event.head_commit.message }}
+          files: app/build/outputs/apk/release/AI-Relay-v2.5.0.apk
           generate_release_notes: true

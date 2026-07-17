@@ -9,11 +9,11 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example"
+        applicationId = "com.example.airelay"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 25
+        versionName = "2.5.0"
     }
 
     val keystoreFile = rootProject.file("release.keystore")
@@ -104,6 +104,9 @@ dependencies {
 
     // OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // SLF4J nop (satisfy Netty/Ktor R8)
+    implementation("org.slf4j:slf4j-nop:2.0.9")
 
     // Kotlinx
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
