@@ -1,41 +1,55 @@
 package com.example
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import com.example.ui.navigation.AppNavGraph
-import java.io.File
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
-            val app = application
-            if (app !is AiRelayApp) {
-                showError("Application 类型错误: ${app.javaClass.name}")
-                return
-            }
-            val container = app.container
-            setContent {
-                AppNavGraph(container = container)
-            }
+            Log.i("AiRelay", "Starting...")
+            showText("AI Relay", "启动中...\n\n如果此页面不消失，说明应用初始化成功。")
+
+            val app = application as AiRelayApp
+            Log.i("AiRelay", "AppContainer loaded")
+            showText("AI Relay", "Container 就绪")
+
+            val tokenRepo = app.container.tokenRepository
+            Log.i("AiRelay", "tokenRepo=$tokenRepo")
+            showText("AI Relay", "数据库就绪")
         } catch (e: Throwable) {
-            try {
-                File(filesDir, "crash_log.txt").writeText(e.stackTraceToString())
-            } catch (_: Exception) {}
-            showError(e.stackTraceToString())
+            Log.e("AiRelay", "Startup failed", e)
+            showError(e)
         }
     }
 
-    private fun showError(msg: String) {
-        val tv = TextView(this).apply {
-            text = "启动失败:\n\n$msg"
-            setTextColor(0xFFFFFFFF.toInt())
-            setBackgroundColor(0xFF0D1117.toInt())
+    private fun showError(e: Throwable) {
+        val msg = "${e.javaClass.name}: ${e.message}\n\n${e.stackTraceToString()}"
+        showText("启动失败", msg)
+    }
+
+    private fun showText(title: String, body: String) {
+        val root = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
             setPadding(48, 96, 48, 48)
-            textSize = 12f
+            setBackgroundColor(0xFF0D1117.toInt())
         }
-        setContentView(tv)
+        root.addView(TextView(this).apply {
+            text = title
+            setTextColor(0xFFE6EDF3.toInt())
+            textSize = 24f
+        })
+        root.addView(TextView(this).apply {
+            text = body
+            setTextColor(0xFF8B949E.toInt())
+            textSize = 12f
+            setPadding(0, 24, 0, 0)
+        })
+        val sv = ScrollView(this).apply { addView(root) }
+        setContentView(sv)
     }
 }

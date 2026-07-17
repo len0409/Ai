@@ -46,13 +46,13 @@ jobs:
         id: version
         run: |
           COMMIT_COUNT=$(git rev-list --count HEAD)
-          echo "tag=v2.5.1-${COMMIT_COUNT}" >> $GITHUB_OUTPUT
-          echo "name=AI Relay v2.5.1 正式版" >> $GITHUB_OUTPUT
+          echo "tag=v2.5.2-${COMMIT_COUNT}" >> $GITHUB_OUTPUT
+          echo "name=AI Relay v2.5.2 正式版" >> $GITHUB_OUTPUT
 
       - name: Rename APK
         run: |
           cp app/build/outputs/apk/release/app-release.apk \
-             app/build/outputs/apk/release/AI-Relay-v2.5.1.apk
+             app/build/outputs/apk/release/AI-Relay-v2.5.2.apk
           ls -lh app/build/outputs/apk/release/
 
       - name: Create Release
@@ -61,10 +61,11 @@ jobs:
           tag_name: ${{ steps.version.outputs.tag }}
           name: ${{ steps.version.outputs.name }}
           body: |
-            ## AI Relay v2.5.1 正式版
+            ## AI Relay v2.5.2 正式版
 
-            签名 Release APK（关闭 R8 混淆，修复黑屏）
+            纯原生 View 启动，无 Compose 依赖，逐行初始化并输出日志。
 
-            下载 `AI-Relay-v2.5.1.apk` 安装。若已装旧版请先卸载再装。
-          files: app/build/outputs/apk/release/AI-Relay-v2.5.1.apk
+            下载 `AI-Relay-v2.5.2.apk` 安装后，屏幕会显示初始化状态。
+            如果黑屏或闪退，说明 Application 或系统依赖层已崩溃。
+          files: app/build/outputs/apk/release/AI-Relay-v2.5.2.apk
           generate_release_notes: true

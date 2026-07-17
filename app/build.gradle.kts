@@ -12,8 +12,8 @@ android {
         applicationId = "com.example.airelay"
         minSdk = 26
         targetSdk = 34
-        versionCode = 26
-        versionName = "2.5.1"
+        versionCode = 27
+        versionName = "2.5.2"
     }
 
     val keystoreFile = rootProject.file("release.keystore")
@@ -62,7 +62,6 @@ android {
             excludes += "META-INF/io.netty.versions.properties"
             excludes += "META-INF/NOTICE.md"
             excludes += "META-INF/LICENSE.md"
-            excludes += "META-INF/*.kotlin_module"
         }
     }
 }
