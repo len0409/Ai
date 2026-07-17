@@ -48,9 +48,9 @@ fun AppNavGraph(container: AppContainer) {
                 val uiState by vm.uiState.collectAsStateWithLifecycle()
                 PlatformListScreen(
                     uiState = uiState,
-                    onLogin = {
-                        vm.selectPlatform(it)
-                        navController.navigate(NavRoutes.loginRoute(it.id))
+                    onLogin = { item ->
+                        vm.selectPlatform(item.platform)
+                        navController.navigate(NavRoutes.loginRoute(item.platform.id))
                     },
                     onOpenDashboard = { navController.navigate(NavRoutes.DASHBOARD) },
                     onOpenSettings = { navController.navigate(NavRoutes.SETTINGS) }

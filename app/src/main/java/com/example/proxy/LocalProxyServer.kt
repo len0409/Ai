@@ -212,11 +212,11 @@ AFTER COMPLETION:
             ))) + messages.toList()
         )
 
-        agentOrchestrator.onToolCall = { iter, tool, args ->
+        agentOrchestrator!!.onToolCall = { iter, tool, args ->
             agentLogs.add(AgentStepLog(iter.toIntOrNull() ?: 0, tool, args, false, ""))
         }
 
-        val result = agentOrchestrator.executeLoop(route, enhancedMessages, modelId)
+        val result = agentOrchestrator!!.executeLoop(route, enhancedMessages, modelId)
 
         val responseJson = JsonObject(mapOf(
             "id" to JsonPrimitive("agent-${System.currentTimeMillis()}"),

@@ -22,7 +22,7 @@ import com.example.ui.theme.*
 @Composable
 fun PlatformListScreen(
     uiState: PlatformListUiState,
-    onLogin: () -> Unit,
+    onLogin: (PlatformWithStatus) -> Unit,
     onOpenDashboard: () -> Unit,
     onOpenSettings: () -> Unit
 ) {
@@ -69,7 +69,7 @@ fun PlatformListScreen(
                                 platform = item.platform,
                                 statusText = item.statusText,
                                 isActive = item.isActive,
-                                onClick = onLogin
+                                onClick = { onLogin(item) }
                             )
                         }
                     }

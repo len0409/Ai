@@ -1,6 +1,6 @@
 package com.example.agent
 
-import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.*
 
 class ToolRegistry {
     private val tools = mutableMapOf<String, Tool>()
