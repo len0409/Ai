@@ -12,8 +12,8 @@ android {
         applicationId = "com.example.airelay"
         minSdk = 26
         targetSdk = 34
-        versionCode = 27
-        versionName = "2.5.2"
+        versionCode = 28
+        versionName = "2.5.3"
     }
 
     val keystoreFile = rootProject.file("release.keystore")
@@ -31,7 +31,6 @@ android {
             isDebuggable = true
         }
         release {
-            // R8 会裁掉 Compose 导致黑屏，正式包先关闭混淆，只做签名
             isMinifyEnabled = false
             isShrinkResources = false
             if (keystoreFile.exists()) signingConfig = signingConfigs.getByName("release")
@@ -53,7 +52,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.5"
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
 
     packaging {
@@ -67,7 +66,7 @@ android {
 }
 
 dependencies {
-    val composeBom = platform("androidx.compose:compose-bom:2024.01.00")
+    val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
     implementation(composeBom)
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -79,15 +78,15 @@ dependencies {
     implementation("androidx.compose.animation:animation")
     implementation("androidx.compose.runtime:runtime")
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.activity:activity-compose:1.9.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.2")
     implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.security:security-crypto:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
@@ -99,12 +98,9 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
 
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("org.slf4j:slf4j-nop:2.0.9")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
-    implementation("androidx.webkit:webkit:1.9.0")
-
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation("androidx.webkit:webkit:1.11.0")
 }

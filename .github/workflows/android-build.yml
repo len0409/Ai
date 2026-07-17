@@ -45,15 +45,13 @@ jobs:
       - name: Generate version tag
         id: version
         run: |
-          COMMIT_COUNT=$(git rev-list --count HEAD)
-          echo "tag=v2.5.2-${COMMIT_COUNT}" >> $GITHUB_OUTPUT
-          echo "name=AI Relay v2.5.2 正式版" >> $GITHUB_OUTPUT
+          echo "tag=v2.5.3" >> $GITHUB_OUTPUT
+          echo "name=AI Relay v2.5.3 正式版" >> $GITHUB_OUTPUT
 
       - name: Rename APK
         run: |
           cp app/build/outputs/apk/release/app-release.apk \
-             app/build/outputs/apk/release/AI-Relay-v2.5.2.apk
-          ls -lh app/build/outputs/apk/release/
+             app/build/outputs/apk/release/AI-Relay-v2.5.3.apk
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -61,11 +59,11 @@ jobs:
           tag_name: ${{ steps.version.outputs.tag }}
           name: ${{ steps.version.outputs.name }}
           body: |
-            ## AI Relay v2.5.2 正式版
+            ## AI Relay v2.5.3 正式版
 
-            纯原生 View 启动，无 Compose 依赖，逐行初始化并输出日志。
-
-            下载 `AI-Relay-v2.5.2.apk` 安装后，屏幕会显示初始化状态。
-            如果黑屏或闪退，说明 Application 或系统依赖层已崩溃。
-          files: app/build/outputs/apk/release/AI-Relay-v2.5.2.apk
+            - 升级 Kotlin 1.9.22 + Compose 编译器 1.5.11
+            - 升级 Compose BOM 2024.06 + 全套 AndroidX 最新版
+            - 移除 enableEdgeToEdge（部分设备兼容问题）
+            - 全局 try-catch + Compose 错误页面
+          files: app/build/outputs/apk/release/AI-Relay-v2.5.3.apk
           generate_release_notes: true
