@@ -9,7 +9,7 @@ import com.example.ui.navigation.AppNavGraph
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        try { enableEdgeToEdge() } catch (_: Exception) {}
         val container = (application as AiRelayApp).container
         setContent {
             AppNavGraph(container = container)

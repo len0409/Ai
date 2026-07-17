@@ -20,37 +20,52 @@ class AppContainer(private val context: Context) {
     val apiForwarder by lazy { ApiForwarder() }
 
     val toolRegistry by lazy {
-        ToolRegistry().apply {
-            register(ShellExecTool())
-            register(FileReadTool())
-            register(FileWriteTool())
-            register(FileSearchTool())
-            register(ContentSearchTool())
-            register(WebFetchTool())
-            register(DeviceInfoTool())
-            register(ClipboardTool(context))
-            register(TodoListTool())
-            register(GitTool())
-            register(CodeAnalysisTool())
-            register(KnowledgeMemoryTool())
+        try {
+            ToolRegistry().apply {
+                register(ShellExecTool())
+                register(FileReadTool())
+                register(FileWriteTool())
+                register(FileSearchTool())
+                register(ContentSearchTool())
+                register(WebFetchTool())
+                register(DeviceInfoTool())
+                register(ClipboardTool(context))
+                register(TodoListTool())
+                register(GitTool())
+                register(CodeAnalysisTool())
+                register(KnowledgeMemoryTool())
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("AppContainer", "toolRegistry init failed", e)
+            ToolRegistry() // fallback to empty registry
         }
     }
 
     val agentOrchestrator by lazy {
-        AgentOrchestrator(toolRegistry, apiForwarder, maxIterations = 20).apply {
-            onConfirmRequired = { msg -> true }
-            onProgress = { /* can be observed via logs */ }
+        try {
+            AgentOrchestrator(toolRegistry, apiForwarder, maxIterations = 20).apply {
+                onConfirmRequired = { msg -> true }
+                onProgress = { /* can be observed via logs */ }
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("AppContainer", "agentOrchestrator init failed", e)
+            null
         }
     }
 
     val tokenHealthChecker by lazy {
-        TokenHealthChecker(tokenRepository, apiForwarder)
+        try {
+            TokenHealthChecker(tokenRepository, apiForwarder)
+        } catch (e: Exception) {
+            android.util.Log.e("AppContainer", "tokenHealthChecker init failed", e)
+            null
+        }
     }
 
     val proxyServer: LocalProxyServer by lazy {
         LocalProxyServer(
-            port = preferencesRepository.getProxyPort(),
-            proxyApiKey = preferencesRepository.getProxyApiKey(),
+            port = try { preferencesRepository.getProxyPort() } catch (_: Exception) { 8080 },
+            proxyApiKey = try { preferencesRepository.getProxyApiKey() } catch (_: Exception) { "sk-local-proxy-key" },
             tokenRepository = tokenRepository,
             modelRouter = modelRouter,
             apiForwarder = apiForwarder,

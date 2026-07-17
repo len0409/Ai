@@ -29,7 +29,7 @@ data class DashboardUiState(
 class DashboardViewModel(
     private val tokenRepository: TokenRepository,
     private val proxyServer: LocalProxyServer,
-    private val healthChecker: TokenHealthChecker
+    private val healthChecker: TokenHealthChecker?
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState())
@@ -44,12 +44,12 @@ class DashboardViewModel(
             }
         }
         viewModelScope.launch {
-            healthChecker.healthStatus.collect { status ->
+            healthChecker?.healthStatus?.collect { status ->
                 _uiState.update { it.copy(healthStatus = status) }
             }
         }
         startProxyIfNeeded()
-        healthChecker.startPeriodicCheck()
+        healthChecker?.startPeriodicCheck()
     }
 
     private fun startProxyIfNeeded() {
@@ -107,7 +107,7 @@ class DashboardViewModel(
     fun checkHealth() {
         viewModelScope.launch {
             _uiState.update { it.copy(isCheckingHealth = true) }
-            healthChecker.checkAllTokens()
+            healthChecker?.checkAllTokens()
             _uiState.update { it.copy(isCheckingHealth = false) }
         }
     }
@@ -115,6 +115,6 @@ class DashboardViewModel(
     override fun onCleared() {
         super.onCleared()
         statusPollJob?.cancel()
-        healthChecker.stop()
+        healthChecker?.stop()
     }
 }
