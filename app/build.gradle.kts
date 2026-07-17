@@ -12,8 +12,8 @@ android {
         applicationId = "com.example.airelay"
         minSdk = 26
         targetSdk = 34
-        versionCode = 25
-        versionName = "2.5.0"
+        versionCode = 26
+        versionName = "2.5.1"
     }
 
     val keystoreFile = rootProject.file("release.keystore")
@@ -31,8 +31,9 @@ android {
             isDebuggable = true
         }
         release {
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // R8 会裁掉 Compose 导致黑屏，正式包先关闭混淆，只做签名
+            isMinifyEnabled = false
+            isShrinkResources = false
             if (keystoreFile.exists()) signingConfig = signingConfigs.getByName("release")
         }
     }
@@ -55,19 +56,18 @@ android {
         kotlinCompilerExtensionVersion = "1.5.5"
     }
 
-
     packaging {
         resources {
             excludes += "META-INF/INDEX.LIST"
             excludes += "META-INF/io.netty.versions.properties"
             excludes += "META-INF/NOTICE.md"
             excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/*.kotlin_module"
         }
     }
 }
 
 dependencies {
-    // Compose BOM
     val composeBom = platform("androidx.compose:compose-bom:2024.01.00")
     implementation(composeBom)
     implementation("androidx.compose.ui:ui")
@@ -80,7 +80,6 @@ dependencies {
     implementation("androidx.compose.animation:animation")
     implementation("androidx.compose.runtime:runtime")
 
-    // AndroidX
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
@@ -91,28 +90,21 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.security:security-crypto:1.0.0")
 
-    // Room
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
 
-    // Ktor (gateway server)
     implementation("io.ktor:ktor-server-core:2.3.7")
     implementation("io.ktor:ktor-server-netty:2.3.7")
     implementation("io.ktor:ktor-server-content-negotiation:2.3.7")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
 
-    // OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
-
-    // SLF4J nop (satisfy Netty/Ktor R8)
     implementation("org.slf4j:slf4j-nop:2.0.9")
 
-    // Kotlinx
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 
-    // WebView / JS
     implementation("androidx.webkit:webkit:1.9.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
